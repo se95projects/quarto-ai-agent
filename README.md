@@ -1,4 +1,4 @@
-# Quarto AI Agent
+![](./quarto-arbiter.png)
 
 An AI-powered Quarto game assistant that plays, explains its reasoning, and teaches strategy through a multi-agent architecture combining classical game tree search with modern LLM capabilities.
 
