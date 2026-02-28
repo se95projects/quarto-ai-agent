@@ -60,15 +60,11 @@ Simple rules. Deep strategy.
 
 ## Roadmap
 
-A relaxed 12-week plan at 3-5 hours per week. Each phase produces something complete—you can stop at any checkpoint and have a working project.
-
----
-
-### Phase 1: Foundation (Weeks 1-3)
+### Phase 1: Foundation (Steps 1-3)
 
 **Goal:** Understand the game deeply and build the core engine.
 
-#### Week 1: Research + Play
+#### Step 1: Research + Play
 - [ ] Play 10+ games of Quarto (online at quarto.cc or physical)
 - [ ] Pay attention to your reasoning—what makes you pick a piece, choose a square
 - [ ] Read 3-4 strategy articles, take notes
@@ -79,7 +75,7 @@ A relaxed 12-week plan at 3-5 hours per week. Each phase produces something comp
 - [Quarto on BoardGameGeek](https://boardgamegeek.com/boardgame/681/quarto)
 - [Play Quarto Online](https://quarto.cc)
 
-#### Week 2: Game State Modeling
+#### Step 2: Game State Modeling
 - [ ] Define `Piece` dataclass (4 boolean attributes)
 - [ ] Define `Board` class (4x4 grid, None for empty squares)
 - [ ] Define `GameState` (board, remaining pieces, current phase, selected piece)
@@ -88,7 +84,7 @@ A relaxed 12-week plan at 3-5 hours per week. Each phase produces something comp
 - [ ] Implement `make_move(state, placement, piece_to_give)` → new state
 - [ ] Write unit tests for each function
 
-#### Week 3: Win Detection + CLI
+#### Step 3: Win Detection + CLI
 - [ ] Implement `check_winner(state)` checking:
   - [ ] Rows (4 checks)
   - [ ] Columns (4 checks)
