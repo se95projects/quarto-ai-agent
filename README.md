@@ -273,8 +273,7 @@ quarto-ai-agent/
 │   │
 │   ├── engine/                 # Core game logic
 │   │   ├── __init__.py
-│   │   ├── piece.py            # Piece representation
-│   │   ├── board.py            # Board state
+│   │   ├── models.py           # Piece representation and Board state
 │   │   ├── game.py             # Game state and rules
 │   │   └── display.py          # Board rendering
 │   │

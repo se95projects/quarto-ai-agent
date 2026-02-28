@@ -1,11 +1,12 @@
 from itertools import product
 
 import pytest
-from src.models import Piece, Board, GamePhase, GameState
-from src.game import (
+from engine.models import Piece, Board, GamePhase, GameState
+from engine.game import (
     get_legal_placements,
     get_legal_piece_selections,
-    make_move
+    make_move,
+    check_winner
 )
 
 class TestGetLegalPlacement:
@@ -223,3 +224,198 @@ class TestMakeMove:
         assert piece not in result.remaining_pieces
         assert result.current_phase == GamePhase.PLACE_PIECE
         assert current_player != result.current_player
+
+class TestCheckWinner:
+    def test_check_winner_no_winner_empty_board(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        state = GameState(
+            board=Board.empty(),
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.SELECT_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result is None
+
+    def test_check_winner_no_winner(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        pieces = [
+            Piece(height=False, color=True, shape=True, top=True),
+            Piece(height=True, color=False, shape=True, top=True),
+            Piece(height=True, color=True, shape=False, top=True),
+            Piece(height=True, color=True, shape=True, top=False)
+        ]
+        board = Board.empty()
+
+        for i in range(4):
+            remaining_pieces.remove(pieces[i])
+            board.place(piece=pieces[i], row=i, col=i)
+
+        state = GameState(
+            board=board,
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.SELECT_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result is None
+
+    def test_check_winner_row(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        pieces = [
+            Piece(height=True, color=True, shape=True, top=True),
+            Piece(height=True, color=False, shape=True, top=True),
+            Piece(height=True, color=True, shape=False, top=True),
+            Piece(height=True, color=True, shape=True, top=False)
+        ]
+        board = Board.empty()
+
+        for i in range(4):
+            remaining_pieces.remove(pieces[i])
+            board.place(piece=pieces[i], row=0, col=i)
+
+        state = GameState(
+            board=board,
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.PLACE_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result == state.current_player
+
+    def test_check_winner_column(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        pieces = [
+            Piece(height=True, color=True, shape=True, top=True),
+            Piece(height=True, color=False, shape=True, top=True),
+            Piece(height=True, color=True, shape=False, top=True),
+            Piece(height=True, color=True, shape=True, top=False)
+        ]
+        board = Board.empty()
+
+        for i in range(4):
+            remaining_pieces.remove(pieces[i])
+            board.place(piece=pieces[i], row=i, col=0)
+
+        state = GameState(
+            board=board,
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.PLACE_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result == state.current_player
+
+    def test_check_winner_main_diag(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        pieces = [
+            Piece(height=True, color=True, shape=True, top=True),
+            Piece(height=True, color=False, shape=True, top=True),
+            Piece(height=True, color=True, shape=False, top=True),
+            Piece(height=True, color=True, shape=True, top=False)
+        ]
+        board = Board.empty()
+
+        for i in range(4):
+            remaining_pieces.remove(pieces[i])
+            board.place(piece=pieces[i], row=i, col=i)
+
+        state = GameState(
+            board=board,
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.PLACE_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result == state.current_player
+
+    def test_check_winner_anti_diag(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        pieces = [
+            Piece(height=True, color=True, shape=True, top=True),
+            Piece(height=True, color=False, shape=True, top=True),
+            Piece(height=True, color=True, shape=False, top=True),
+            Piece(height=True, color=True, shape=True, top=False)
+        ]
+        board = Board.empty()
+
+        for i in range(4):
+            remaining_pieces.remove(pieces[i])
+            board.place(piece=pieces[i], row=i, col=3-i)
+
+        state = GameState(
+            board=board,
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.PLACE_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result == state.current_player
+
+    def test_check_winner_square(self):
+        remaining_pieces = [
+            Piece(height=h, color=c, shape=s, top=t)
+            for h, c, s, t in product([True, False], repeat=4)
+        ]
+        current_player = 0
+        pieces = [
+            Piece(height=True, color=True, shape=True, top=True),
+            Piece(height=True, color=False, shape=True, top=True),
+            Piece(height=True, color=True, shape=False, top=True),
+            Piece(height=True, color=True, shape=True, top=False)
+        ]
+        board = Board.empty()
+
+        p = 0
+        for i in range(2):
+            for j in range(2):
+                remaining_pieces.remove(pieces[p])
+                board.place(piece=pieces[p], row=i, col=j)
+                p += 1
+
+        state = GameState(
+            board=board,
+            remaining_pieces=remaining_pieces,
+            current_phase=GamePhase.PLACE_PIECE,
+            selected_piece=None,
+            current_player=current_player
+        )
+
+        result = check_winner(state)
+        assert result == state.current_player

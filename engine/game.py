@@ -1,4 +1,4 @@
-from src.models import GameState, Piece, GamePhase
+from engine.models import GameState, Piece, GamePhase
 from typing import Optional
 
 def get_legal_placements(state: GameState) -> list[tuple[int, int]]:
@@ -53,3 +53,41 @@ def make_move(
             raise ValueError("Position is already occupied or out of bounds.")
 
     return state
+
+def _pieces_share_attribute(pieces: list[Piece]):
+    for attr in ("height", "color", "shape", "top"):
+        if len(set(getattr(p, attr) for p in pieces)) == 1:
+            return True
+    return False
+
+def check_winner(state: GameState):
+    grid = state.board.grid
+
+    # check rows
+    for i in range(4):
+        row = grid[i][0:]
+        if None not in row and _pieces_share_attribute(row):
+            return state.current_player
+
+    # check columns
+    for j in range(4):
+        col = [grid[i][j] for i in range(4)]
+        if None not in col and _pieces_share_attribute(col):
+            return state.current_player
+
+    # check diagonals
+    top_left_diag = [grid[i][i] for i in range(4)]
+    top_right_diag = [grid[i][3 - i] for i in range(4)]
+    if None not in top_left_diag and _pieces_share_attribute(top_left_diag):
+        return state.current_player
+    if None not in top_right_diag and _pieces_share_attribute(top_right_diag):
+        return state.current_player
+
+    # check 2x2 squares
+    for i in range(3):
+        for j in range(3):
+            square = [grid[r][c] for r in range(i, i + 2) for c in range(j, j + 2)]
+            if None not in square and _pieces_share_attribute(square):
+                return state.current_player
+
+    return None
