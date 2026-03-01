@@ -1,14 +1,14 @@
 from itertools import product
 
 import pytest
-from engine.models import Piece, Board, GamePhase, GameState
-from engine.game import (
+from src.engine.models import Piece, Board, GamePhase, GameState
+from src.engine.game import (
     get_legal_placements,
     get_legal_piece_selections,
     make_move,
     check_winner
 )
-from engine.cli import piece_to_code, _parse_piece_string, _parse_placement_string
+from src.interface.cli import piece_to_code, _parse_piece_string, _parse_placement_string
 
 class TestGetLegalPlacement:
     def test_legal_placement_empty_board(self):

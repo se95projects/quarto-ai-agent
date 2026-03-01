@@ -60,40 +60,40 @@ Simple rules. Deep strategy.
 
 ## Roadmap
 
-### Phase 1: Foundation (Steps 1-3)
+### Phase 1: Foundation (Steps 1-2) ✅
 
 **Goal:** Understand the game deeply and build the core engine.
 
 #### Step 1: Research + Play
-- [ ] Play 10+ games of Quarto (online at quarto.cc or physical)
-- [ ] Pay attention to your reasoning—what makes you pick a piece, choose a square
-- [ ] Read 3-4 strategy articles, take notes
-- [ ] Bookmark resources for the knowledge base later
-- [ ] No code yet. Just internalize the game.
+- [x] Play 10+ games of Quarto (online at quarto.cc or physical)
+- [x] Pay attention to your reasoning—what makes you pick a piece, choose a square
+- [x] Read 3-4 strategy articles, take notes
+- [x] Bookmark resources for the knowledge base later
+- [x] No code yet. Just internalize the game.
 
 **Resources:**
 - [Quarto on BoardGameGeek](https://boardgamegeek.com/boardgame/681/quarto)
 - [Play Quarto Online](https://quarto.cc)
 
 #### Step 2: Game State Modeling
-- [ ] Define `Piece` dataclass (4 boolean attributes)
-- [ ] Define `Board` class (4x4 grid, None for empty squares)
-- [ ] Define `GameState` (board, remaining pieces, current phase, selected piece)
-- [ ] Implement `get_legal_placements(state)` → list of empty squares
-- [ ] Implement `get_legal_piece_selections(state)` → list of remaining pieces
-- [ ] Implement `make_move(state, placement, piece_to_give)` → new state
-- [ ] Write unit tests for each function
+- [x] Define `Piece` dataclass (4 boolean attributes)
+- [x] Define `Board` class (4x4 grid, None for empty squares)
+- [x] Define `GameState` (board, remaining pieces, current phase, selected piece)
+- [x] Implement `get_legal_placements(state)` → list of empty squares
+- [x] Implement `get_legal_piece_selections(state)` → list of remaining pieces
+- [x] Implement `make_move(state, placement, piece_to_give)` → new state
+- [x] Write unit tests for each function
 
 #### Step 3: Win Detection + CLI
-- [ ] Implement `check_winner(state)` checking:
-  - [ ] Rows (4 checks)
-  - [ ] Columns (4 checks)
-  - [ ] Diagonals (2 checks)
-  - [ ] 2x2 squares (9 checks)
-- [ ] Build simple CLI: display board, input moves, play a full game
-- [ ] Test by playing through several games manually
+- [x] Implement `check_winner(state)` checking:
+  - [x] Rows (4 checks)
+  - [x] Columns (4 checks)
+  - [x] Diagonals (2 checks)
+  - [x] 2x2 squares (9 checks)
+- [x] Build simple CLI: display board, input moves, play a full game
+- [x] Test by playing through several games manually
 
-**Checkpoint:** Working Quarto game engine you can play in the terminal.
+**Checkpoint:** ✅ Working Quarto game engine you can play in the terminal.
 
 ---
 
@@ -259,7 +259,7 @@ No pressure. Pick what sounds fun.
 ## Project Structure
 
 ```
-quarto-ai-agent/
+quarto-arbiter/
 ├── README.md
 ├── pyproject.toml
 ├── requirements.txt

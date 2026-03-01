@@ -1,4 +1,4 @@
-from engine.models import GameState, Piece, GamePhase
+from src.engine.models import GameState, Piece, GamePhase
 from typing import Optional
 
 def get_legal_placements(state: GameState) -> list[tuple[int, int]]:

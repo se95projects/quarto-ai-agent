@@ -1,7 +1,7 @@
 from itertools import product
 
-from engine.models import GameState, Piece, Board, GamePhase
-from engine.game import (
+from src.engine.models import GameState, Piece, Board, GamePhase
+from src.engine.game import (
     get_legal_placements,
     get_legal_piece_selections,
     make_move,
