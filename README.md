@@ -64,18 +64,7 @@ Simple rules. Deep strategy.
 
 **Goal:** Understand the game deeply and build the core engine.
 
-#### Step 1: Research + Play
-- [x] Play 10+ games of Quarto (online at quarto.cc or physical)
-- [x] Pay attention to your reasoning—what makes you pick a piece, choose a square
-- [x] Read 3-4 strategy articles, take notes
-- [x] Bookmark resources for the knowledge base later
-- [x] No code yet. Just internalize the game.
-
-**Resources:**
-- [Quarto on BoardGameGeek](https://boardgamegeek.com/boardgame/681/quarto)
-- [Play Quarto Online](https://quarto.cc)
-
-#### Step 2: Game State Modeling
+#### Step 1: Game State Modeling
 - [x] Define `Piece` dataclass (4 boolean attributes)
 - [x] Define `Board` class (4x4 grid, None for empty squares)
 - [x] Define `GameState` (board, remaining pieces, current phase, selected piece)
@@ -84,7 +73,7 @@ Simple rules. Deep strategy.
 - [x] Implement `make_move(state, placement, piece_to_give)` → new state
 - [x] Write unit tests for each function
 
-#### Step 3: Win Detection + CLI
+#### Step 2: Win Detection + CLI
 - [x] Implement `check_winner(state)` checking:
   - [x] Rows (4 checks)
   - [x] Columns (4 checks)
@@ -97,11 +86,11 @@ Simple rules. Deep strategy.
 
 ---
 
-### Phase 2: Basic Strategy (Weeks 4-6)
+### Phase 2: Basic Strategy (Steps 3-5)
 
 **Goal:** Build an AI that plays reasonably.
 
-#### Week 4: Position Evaluation
+#### Step 3: Position Evaluation
 - [ ] Design evaluation heuristic considering:
   - [ ] Immediate wins/losses
   - [ ] "Three in a row" threats (pieces sharing an attribute)
@@ -110,14 +99,14 @@ Simple rules. Deep strategy.
 - [ ] Test heuristic on sample positions
 - [ ] Tune weights based on intuition
 
-#### Week 5: Minimax Implementation
+#### Step 4: Minimax Implementation
 - [ ] Implement basic minimax (no pruning)
 - [ ] Handle two-phase turns (place piece, then select piece to give)
 - [ ] Depth 2-3 to start
 - [ ] Add `get_best_move(state, depth)` → (placement, piece_to_give)
 - [ ] Play against it, observe behavior
 
-#### Week 6: Alpha-Beta Pruning + Tuning
+#### Step 5: Alpha-Beta Pruning + Tuning
 - [ ] Add alpha-beta pruning
 - [ ] Implement move ordering (check winning moves first, etc.)
 - [ ] Increase depth to 4-5
