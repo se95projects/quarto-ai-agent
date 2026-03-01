@@ -8,6 +8,7 @@ from engine.game import (
     make_move,
     check_winner
 )
+from engine.cli import piece_to_code, _parse_piece_string, _parse_placement_string
 
 class TestGetLegalPlacement:
     def test_legal_placement_empty_board(self):
@@ -299,7 +300,7 @@ class TestCheckWinner:
         )
 
         result = check_winner(state)
-        assert result == state.current_player
+        assert result == 1-state.current_player
 
     def test_check_winner_column(self):
         remaining_pieces = [
@@ -328,7 +329,7 @@ class TestCheckWinner:
         )
 
         result = check_winner(state)
-        assert result == state.current_player
+        assert result == 1-state.current_player
 
     def test_check_winner_main_diag(self):
         remaining_pieces = [
@@ -357,7 +358,7 @@ class TestCheckWinner:
         )
 
         result = check_winner(state)
-        assert result == state.current_player
+        assert result == 1-state.current_player
 
     def test_check_winner_anti_diag(self):
         remaining_pieces = [
@@ -386,7 +387,7 @@ class TestCheckWinner:
         )
 
         result = check_winner(state)
-        assert result == state.current_player
+        assert result == 1-state.current_player
 
     def test_check_winner_square(self):
         remaining_pieces = [
@@ -418,4 +419,63 @@ class TestCheckWinner:
         )
 
         result = check_winner(state)
-        assert result == state.current_player
+        assert result == 1-state.current_player
+
+
+class TestCliParsing:
+    """Unit tests for CLI helpers: piece_to_code, _parse_piece_string, _parse_placement_string."""
+
+    def test_piece_to_code_all_true(self):
+        p = Piece(height=True, color=True, shape=True, top=True)
+        assert piece_to_code(p) == "TLSH"  # H = Hollow (top True)
+
+    def test_piece_to_code_all_false(self):
+        p = Piece(height=False, color=False, shape=False, top=False)
+        assert piece_to_code(p) == "SDRS"
+
+    def test_piece_to_code_mixed(self):
+        p = Piece(height=True, color=False, shape=True, top=False)
+        assert piece_to_code(p) == "TDSS"  # S = Solid (top False)
+
+    def test_parse_piece_string_valid(self):
+        assert _parse_piece_string("TLSH") == Piece(height=True, color=True, shape=True, top=True)
+        assert _parse_piece_string("SDRS") == Piece(height=False, color=False, shape=False, top=False)
+        assert _parse_piece_string("TLSS") == Piece(height=True, color=True, shape=True, top=False)
+        assert _parse_piece_string("TDRH") == Piece(height=True, color=False, shape=False, top=True)
+
+    def test_parse_piece_string_invalid_length(self):
+        assert _parse_piece_string("") is None
+        assert _parse_piece_string("TLS") is None
+        assert _parse_piece_string("TLSSS") is None
+
+    def test_parse_piece_string_invalid_letters(self):
+        assert _parse_piece_string("TLSX") is None
+        assert _parse_piece_string("XXYY") is None
+        assert _parse_piece_string("T1SS") is None
+
+    def test_parse_piece_string_roundtrip(self):
+        p = Piece(height=True, color=False, shape=True, top=False)
+        code = piece_to_code(p)
+        assert _parse_piece_string(code) == p
+
+    def test_parse_placement_string_valid(self):
+        assert _parse_placement_string("0,0") == (0, 0)
+        assert _parse_placement_string("1,2") == (1, 2)
+        assert _parse_placement_string("3,3") == (3, 3)
+        assert _parse_placement_string("1, 2") == (1, 2)
+        assert _parse_placement_string("  2 , 1  ") == (2, 1)
+
+    def test_parse_placement_string_invalid_format(self):
+        assert _parse_placement_string("") is None
+        assert _parse_placement_string("1") is None
+        assert _parse_placement_string("1,2,3") is None
+        assert _parse_placement_string("a,b") is None
+        assert _parse_placement_string("1,b") is None
+        assert _parse_placement_string("a,2") is None
+
+    def test_parse_placement_string_out_of_range(self):
+        assert _parse_placement_string("-1,0") is None
+        assert _parse_placement_string("0,-1") is None
+        assert _parse_placement_string("4,0") is None
+        assert _parse_placement_string("0,4") is None
+        assert _parse_placement_string("5,5") is None

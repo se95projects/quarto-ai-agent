@@ -4,7 +4,8 @@ from engine.models import GameState, Piece, Board, GamePhase
 from engine.game import (
     get_legal_placements,
     get_legal_piece_selections,
-    make_move
+    make_move,
+    check_winner
 )
 
 def piece_to_code(p: Piece) -> str:
@@ -102,7 +103,7 @@ def parse_placement(legal_placements: list[tuple[int, int]]) -> tuple[int, int]:
 
 def show_turn(state: GameState) -> None:
     if state.current_phase == GamePhase.SELECT_PIECE:
-        remaining = "Remaining: "
+        remaining = "\nRemaining: "
         for piece in state.remaining_pieces:
             remaining = f"{remaining}{piece_to_code(piece)} "
         print(remaining)
@@ -116,30 +117,37 @@ if __name__ == "__main__":
         Piece(height=h, color=c, shape=s, top=t)
         for h, c, s, t in product([True, False], repeat=4)
     ]
-
-    piece = Piece(height=True, color=True, shape=True, top=True)
-    remaining_pieces.remove(piece)
     board = Board.empty()
-    board.place(piece=piece, row=3, col=3)
-
-    piece = Piece(height=False, color=False, shape=False, top=False)
-    remaining_pieces.remove(piece)
-    board.place(piece=piece, row=0, col=0)
-
     state = GameState(
         board=board,
         remaining_pieces=remaining_pieces,
-        current_phase=GamePhase.PLACE_PIECE,
-        selected_piece=remaining_pieces[0],
+        current_phase=GamePhase.SELECT_PIECE,
+        selected_piece=None,
         current_player=0
     )
 
-    show_board(state)
-    show_turn(state)
+    while True:
+        show_board(state)
+        show_turn(state)
 
-    if state.current_phase == GamePhase.SELECT_PIECE:
-        legal_pieces = get_legal_piece_selections(state)
-        parse_piece(legal_pieces)
-    else:
-        legal_placements = get_legal_placements(state)
-        parse_placement(legal_placements)
+        if state.current_phase == GamePhase.SELECT_PIECE:
+            legal_pieces = get_legal_piece_selections(state)
+            piece = parse_piece(legal_pieces)
+            make_move(state=state, piece_to_give=piece)
+        else:
+            legal_placements = get_legal_placements(state)
+            placement = parse_placement(legal_placements)
+            make_move(state=state, placement=placement)
+
+            winner = check_winner(state)
+            if winner is None and len(state.remaining_pieces) == 0:
+                print("\n")
+                show_board(state)
+                print("\nDraw reached (full board, no winning line).\n")
+                break
+
+            if winner is not None:
+                print("\n")
+                show_board(state)
+                print(f"\nPlayer {winner} has won!\n")
+                break
